@@ -161,6 +161,7 @@ public class Controller {
         	seed = seed_generator.nextInt(10);
         	// TODO: implement code that makes sure we generate different random mazes
         	// HINT: check http://download.oracle.com/javase/6/docs/api/java/util/Random.html
+        	// done
         }
         currentState.setSeed(seed);
         currentState.start(this, panel);
