@@ -7,8 +7,26 @@ import org.junit.jupiter.api.Test;
 class MazeFactoryTest {
 
 	@Test
-	void test() {
-		fail("Not yet implemented");
+	void testAllCellsInstantiated() {
+		// tests if every cell exists
+	}
+	
+	@Test
+	void testNoIsolations() {
+		// tests if there are any cells that cannot be reached
+	}
+	
+	@Test
+	void testNoLoops() {
+		// tests if there are any loops
+	}
+	
+	void testSingleExit() {
+		// tests if there is only one exit
+	}
+	
+	void testReachableExit() {
+		// tests if there is a reachable exit
 	}
 
 }
