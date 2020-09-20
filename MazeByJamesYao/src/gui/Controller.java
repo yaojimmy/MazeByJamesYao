@@ -2,6 +2,10 @@ package gui;
 
 import gui.Constants.UserInput;
 
+import java.util.Random;
+
+import javax.rmi.CORBA.Util;
+
 import generation.CardinalDirection;
 import generation.Maze;
 import generation.Order;
@@ -153,7 +157,8 @@ public class Controller {
         currentState.setPerfect(perfect);
         if (!deterministic) {
         	System.out.println("Assignment: implement code such that a repeated generation creates different mazes! Program stops!");
-			System.exit(0) ;
+        	Random seed_generator = new Random();
+        	seed = seed_generator.nextInt(10);
         	// TODO: implement code that makes sure we generate different random mazes
         	// HINT: check http://download.oracle.com/javase/6/docs/api/java/util/Random.html
         }
