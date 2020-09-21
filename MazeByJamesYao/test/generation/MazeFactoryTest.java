@@ -7,6 +7,11 @@ import org.junit.jupiter.api.Test;
 class MazeFactoryTest {
 
 	@Test
+	void setUp() {
+		// initialize a MazeFactory object to create Maze and run tests on
+	}
+	
+	@Test
 	void testAllCellsInstantiated() {
 		// tests if every cell exists
 	}
