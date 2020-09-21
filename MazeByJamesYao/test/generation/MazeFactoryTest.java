@@ -9,6 +9,7 @@ class MazeFactoryTest {
 	@Test
 	void setUp() {
 		// initialize a MazeFactory object to create Maze and run tests on
+		// order a StubOrder
 	}
 	
 	@Test
