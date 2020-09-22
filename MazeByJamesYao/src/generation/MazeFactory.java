@@ -48,8 +48,8 @@ public class MazeFactory implements Factory {
 			buildOrder();
 			break;
 		case Eller:
-			//builder = new MazeBuilderEller();
-			//buildOrder();
+			builder = new MazeBuilderEller();
+			buildOrder();
 			break;
 		//case input.xml:
 			//break;
