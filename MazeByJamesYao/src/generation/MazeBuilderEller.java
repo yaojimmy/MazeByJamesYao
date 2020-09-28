@@ -1,6 +1,5 @@
 package generation;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,36 +9,6 @@ public class MazeBuilderEller extends MazeBuilder implements Runnable {
 	public MazeBuilderEller() {
 		super();
 		System.out.println("MazeBuilderEller uses Eller's algorithm to generate maze.");
-	}
-	
-	private class Cel{
-		int x;
-		int y;
-		public Cel(int a, int b) {
-			x = a;
-			y = b;
-		}
-		@Override
-		public boolean equals(Object other) {
-			// trivial special cases
-			if (this == other)
-				return true ;
-			if (null == other)
-				return false ;
-			if (getClass() != other.getClass())
-				return false ;
-			// general case
-			final Cel o = (Cel)other;
-			if (x != o.x && y != o.y) {
-				return false;
-			}
-			return true;
-		}
-		@Override
-		public int hashCode() {
-			  assert false : "hashCode not designed";
-			  return 42; // any arbitrary constant will do
-		}
 	}
 
 	/**
@@ -54,57 +23,81 @@ public class MazeBuilderEller extends MazeBuilder implements Runnable {
 	// not implemented yet, just created Eller description from copy of MazeBuilderPrim for now
 	@Override
 	protected void generatePathways() {
-		// stores sets for cells
-		Set[][] sets = new Set[width][height];
-		// loop through the rows
+		// stores set number at coordinate
+		Integer[][] set_nums = new Integer[width][height];
+		int cur_num = 0;
+		
+		// loop through the rows (except last row)
 		for(int y = 0; y < height-1; y++) {
-			// join cells not members of a set to their own set
+			
+			// set cells not members of a set to their own set
 			for(int i = 0; i < width; i++) {
-				if (sets[i][y].size() == 0) {
-					sets[i][y] = new HashSet<Cel>();
-					sets[i][y].add(new Cel(i,y));
+				if (set_nums[i][y] == null) {
+					set_nums[i][y] = cur_num;
+					cur_num++;
 				}
 			}
+			
 			// randomly join adjacent cells not in same set
+			printMaze();
 			int numtimesx = random.nextIntWithinInterval(0, width-1);
 			for (int i = 0; i < numtimesx; i++) {
-				int x = random.nextIntWithinInterval(0, width-1);
-				// checks if already a member of a set
-				Cel c = new Cel(i, y);
-				if (sets[i+1][y].contains(c)) {
+				int x = random.nextIntWithinInterval(0, width-2);
+				
+				// if not in same set, merge
+				if (set_nums[x][y] != set_nums[x+1][y]) {
 					// merge cells of both sets in a single set, delete Wallboard
-					mergeRight(sets, x, y);
+					mergeRight(set_nums, x, y);
+					printMaze();
 				}
 			}
-			// randomly create vertical connections with every remaining set in row
-			int numtimesy = random.nextIntWithinInterval(0, width-1);
-			for (int i = 0; i < numtimesy; i++) {
-				//merge cells of both sets in a single set, delete Wallboard
-				int x = random.nextIntWithinInterval(0, width-1);
-				mergeDown(sets, x, y);
+			printMaze();
+			
+			// randomly create vertical connections with every set
+			int numtimesv = random.nextIntWithinInterval(0, width-1);
+			Set<Integer> used = new HashSet<Integer>();
+			
+			for (int j = 0; j < numtimesv; j++) {
+				int x = random.nextIntWithinInterval(0, width-2);
+				used.add(set_nums[x][y]);
+				mergeDown(set_nums, x, y);
 			}
+			// makes sure 
+			for (int j = 0; j < width; j++) {
+				if(!used.contains(set_nums[j][y])) {
+					used.add(set_nums[j][y]);
+					mergeDown(set_nums, j, y);
+				}
+			}
+			printMaze();
 		}
 		// join cells not members of a set to their own set
 		for (int i = 0; i < width; i++) {
 		// checks if already a member of a set
-			if (sets[i][height-1].size() == 0) {
-				sets[i][height-1] = new HashSet<Cel>();
-				sets[i][height-1].add(new Cel(i,height-1));
+			if (set_nums[i][height-1] == null) {
+				set_nums[i][height-1] = cur_num;
+				cur_num++;
 			}
 		}
 		// connect all adjacent and disjoint cells in last row
 		for (int i = 0; i < width-1; i++) {
-			Cel c = new Cel(i, height-1);
-			if (!sets[i+1][height-1].contains(c)) {
-				mergeRight(sets, i, height-1);
+			if (set_nums[i+1][height-1] != set_nums[i][height-1]) {
+				mergeRight(set_nums, i, height-1);
 			}
 		}
 	}
 	
 	// merges cells horizontally
-	public void mergeRight(Set[][] s, int x, int y) {
-		s[x][y].addAll(s[x+1][y]);
-		s[x+1][y].addAll(s[x][y]);
+	private void mergeRight(Integer[][] s_nums, int x, int y) {
+		// change set number of all values in old set into merged one
+		int old_set_num = s_nums[x+1][y];
+		int merged_set_num = s_nums[x][y];
+		for (int i = 0; i < width; i++) {
+			if (s_nums[i][y] == old_set_num) {
+				s_nums[i][y] = merged_set_num;
+			}
+		}
+		// tear down wallboard between them
 		Wallboard wallboard = new Wallboard(x, y, CardinalDirection.East);
 		if(floorplan.canTearDown(wallboard)) {
 			floorplan.deleteWallboard(wallboard);
@@ -112,12 +105,32 @@ public class MazeBuilderEller extends MazeBuilder implements Runnable {
 	}
 	
 	// merges cells vertically
-	public void mergeDown(Set[][] s, int x, int y) {
-		s[x][y].addAll(s[x][y+1]);
-		s[x][y+1].addAll(s[x][y]);
+	private void mergeDown(Integer[][] s_nums, int x, int y) {
+		// set below number equal to current number
+		s_nums[x][y+1] = s_nums[x][y];
+		// tear down wallboard between them
 		Wallboard wallboard = new Wallboard(x, y, CardinalDirection.South);
 		if(floorplan.canTearDown(wallboard)) {
 			floorplan.deleteWallboard(wallboard);
+		}
+	}
+	
+	// prints maze
+	private void printMaze() {
+		for (int i = 0; i < this.width; i++) {
+			for (int j = 0; j < this.height; j++) {
+				System.out.print(i + "," + j + ":");
+				if (this.floorplan.hasWall(i, j, CardinalDirection.North))
+					System.out.print("N");
+				if (this.floorplan.hasWall(i, j, CardinalDirection.East))
+					System.out.print("E");
+				if (this.floorplan.hasWall(i, j, CardinalDirection.South))
+					System.out.print("S");
+				if (this.floorplan.hasWall(i, j, CardinalDirection.West))
+					System.out.print("W");
+				System.out.print(" ");
+			}
+			System.out.println();
 		}
 	}
 

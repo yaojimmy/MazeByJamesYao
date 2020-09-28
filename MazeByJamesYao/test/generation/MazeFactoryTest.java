@@ -4,12 +4,21 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
+import generation.Order.Builder;
+
 class MazeFactoryTest {
 
 	@Test
 	void setUp() {
 		// initialize a MazeFactory object to create Maze and run tests on
-		// order a StubOrder
+		MazeFactory mfactory = new MazeFactory();
+		// instantiate a StubOrder
+		StubOrder sorder = new StubOrder();
+		sorder.setBuilder(Builder.Eller);
+		// order that StubOrder
+		mfactory.order(sorder);
+		// waitTillDelivered
+		mfactory.waitTillDelivered();
 	}
 	
 	@Test
