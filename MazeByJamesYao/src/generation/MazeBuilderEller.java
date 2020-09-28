@@ -33,8 +33,15 @@ public class MazeBuilderEller extends MazeBuilder implements Runnable {
 			// set cells not members of a set to their own set
 			for(int i = 0; i < width; i++) {
 				if (set_nums[i][y] == null) {
-					set_nums[i][y] = cur_num;
-					cur_num++;
+					// if adjacent cells have no walls, merge
+					if (this.floorplan.hasNoWall(i, y, CardinalDirection.West)) {
+						set_nums[i][y] = cur_num;
+						mergeRight(set_nums, i-1, y);
+					}
+					else {
+						set_nums[i][y] = cur_num;
+						cur_num++;
+					}
 				}
 			}
 			
@@ -48,10 +55,10 @@ public class MazeBuilderEller extends MazeBuilder implements Runnable {
 				if (set_nums[x][y] != set_nums[x+1][y]) {
 					// merge cells of both sets in a single set, delete Wallboard
 					mergeRight(set_nums, x, y);
-					printMaze();
+					// printMaze();
 				}
 			}
-			printMaze();
+			// printMaze();
 			
 			// randomly create vertical connections with every set
 			int numtimesv = random.nextIntWithinInterval(0, width-1);
@@ -62,29 +69,42 @@ public class MazeBuilderEller extends MazeBuilder implements Runnable {
 				used.add(set_nums[x][y]);
 				mergeDown(set_nums, x, y);
 			}
-			// makes sure 
+			// makes sure every set has a vertical connection
 			for (int j = 0; j < width; j++) {
-				if(!used.contains(set_nums[j][y])) {
+				if (!used.contains(set_nums[j][y])) {
 					used.add(set_nums[j][y]);
 					mergeDown(set_nums, j, y);
 				}
+				// if no wallboard between, then has a vertical connection
+				// accounting for rooms
+				if (this.floorplan.hasNoWall(j, y, CardinalDirection.South))
+					mergeDown(set_nums, j, y);
 			}
-			printMaze();
+			// printMaze();
 		}
 		// join cells not members of a set to their own set
+		printMaze();
 		for (int i = 0; i < width; i++) {
-		// checks if already a member of a set
+		// if not already part of set, make it
 			if (set_nums[i][height-1] == null) {
-				set_nums[i][height-1] = cur_num;
-				cur_num++;
+				if (this.floorplan.hasNoWall(i, height-1, CardinalDirection.West)) {
+					set_nums[i][height-1] = cur_num;
+					mergeRight(set_nums, i-1, height-1);
+				}
+				else {
+					set_nums[i][height-1] = cur_num;
+					cur_num++;
+				}
 			}
 		}
+		printMaze();
 		// connect all adjacent and disjoint cells in last row
 		for (int i = 0; i < width-1; i++) {
 			if (set_nums[i+1][height-1] != set_nums[i][height-1]) {
 				mergeRight(set_nums, i, height-1);
 			}
 		}
+		printMaze();
 	}
 	
 	// merges cells horizontally
@@ -92,8 +112,9 @@ public class MazeBuilderEller extends MazeBuilder implements Runnable {
 		// change set number of all values in old set into merged one
 		int old_set_num = s_nums[x+1][y];
 		int merged_set_num = s_nums[x][y];
+		// change all old set numbers in row to merged set number
 		for (int i = 0; i < width; i++) {
-			if (s_nums[i][y] == old_set_num) {
+			if (s_nums[i][y] != null && s_nums[i][y] == old_set_num) {
 				s_nums[i][y] = merged_set_num;
 			}
 		}
@@ -117,21 +138,22 @@ public class MazeBuilderEller extends MazeBuilder implements Runnable {
 	
 	// prints maze
 	private void printMaze() {
-		for (int i = 0; i < this.width; i++) {
-			for (int j = 0; j < this.height; j++) {
-				System.out.print(i + "," + j + ":");
-				if (this.floorplan.hasWall(i, j, CardinalDirection.North))
-					System.out.print("N");
-				if (this.floorplan.hasWall(i, j, CardinalDirection.East))
-					System.out.print("E");
-				if (this.floorplan.hasWall(i, j, CardinalDirection.South))
+		for (int y = this.height-1; y >= 0; y--) {
+			for (int x = 0; x < this.width; x++) {
+				System.out.print(x + "," + y + ":");
+				if (this.floorplan.hasWall(x, y, CardinalDirection.North))
 					System.out.print("S");
-				if (this.floorplan.hasWall(i, j, CardinalDirection.West))
+				if (this.floorplan.hasWall(x, y, CardinalDirection.East))
+					System.out.print("E");
+				if (this.floorplan.hasWall(x, y, CardinalDirection.South))
+					System.out.print("N");
+				if (this.floorplan.hasWall(x, y, CardinalDirection.West))
 					System.out.print("W");
 				System.out.print(" ");
 			}
 			System.out.println();
 		}
+		System.out.println();
 	}
 
 }

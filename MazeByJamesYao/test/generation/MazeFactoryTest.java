@@ -22,11 +22,6 @@ class MazeFactoryTest {
 	}
 	
 	@Test
-	void testAllCellsInstantiated() {
-		// tests if every cell exists
-	}
-	
-	@Test
 	void testNoIsolations() {
 		// tests if there are any cells that cannot be reached
 	}
