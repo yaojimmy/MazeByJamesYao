@@ -46,7 +46,7 @@ public class MazeBuilderEller extends MazeBuilder implements Runnable {
 			}
 			
 			// randomly join adjacent cells not in same set
-			printMaze();
+			// printMaze();
 			int numtimesx = random.nextIntWithinInterval(0, width-1);
 			for (int i = 0; i < numtimesx; i++) {
 				int x = random.nextIntWithinInterval(0, width-2);
@@ -83,7 +83,7 @@ public class MazeBuilderEller extends MazeBuilder implements Runnable {
 			// printMaze();
 		}
 		// join cells not members of a set to their own set
-		printMaze();
+		// printMaze();
 		for (int i = 0; i < width; i++) {
 		// if not already part of set, make it
 			if (set_nums[i][height-1] == null) {
@@ -97,7 +97,7 @@ public class MazeBuilderEller extends MazeBuilder implements Runnable {
 				}
 			}
 		}
-		printMaze();
+		// printMaze();
 		// connect all adjacent and disjoint cells in last row
 		for (int i = 0; i < width-1; i++) {
 			if (set_nums[i+1][height-1] != set_nums[i][height-1]) {
