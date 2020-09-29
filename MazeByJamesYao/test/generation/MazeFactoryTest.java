@@ -8,16 +8,14 @@ import generation.Order.Builder;
 
 class MazeFactoryTest {
 	
-	MazeFactory mfactory;
-	StubOrder sorder;
+	MazeFactory mfactory = new MazeFactory();
+	StubOrder sorder = new StubOrder();
 
 	@Test
 	void setUp() {
-		// template for setting up for tests
+		// my copy-paste template for setting up for tests
 		// initialize a MazeFactory object to create Maze and run tests on
-		mfactory = new MazeFactory();
 		// instantiate a StubOrder
-		sorder = new StubOrder();
 		// set StubOrder values
 		sorder.setBuilder(Builder.Prim);
 		sorder.setPerfect(false);
@@ -32,26 +30,82 @@ class MazeFactoryTest {
 	@Test
 	void testNoIsolations() {
 		// tests there are no isolations in maze
+		// setup
+		sorder.setBuilder(Builder.Eller);
+		sorder.setPerfect(false);
+		sorder.setSeed(2);
+		sorder.setSkillLevel(1);
+		mfactory.order(sorder);
+		mfactory.waitTillDelivered();
+		
+		Maze cur_maze = (MazeContainer)sorder.getMaze();
+		// if there is an isolation, the distance to the exit will be infinity
+		assertFalse(cur_maze.getMazedists().getMaxDistance() == Integer.MAX_VALUE);
 	}
 	
 	@Test
-	void testExitReachableEverywhere() {
-		// finite distance to exit from all positions
+	void testNoIsolationsRectangle() {
+		// tests no isolations for rectangle maze
+		sorder.setBuilder(Builder.Eller);
+		sorder.setPerfect(true);
+		sorder.setSeed(2);
+		sorder.setSkillLevel(4);
+		mfactory.order(sorder);
+		mfactory.waitTillDelivered();
+		
+		Maze cur_maze = (MazeContainer)sorder.getMaze();
+		// if there is an isolation, the distance to the exit will be infinity
+		assertFalse(cur_maze.getMazedists().getMaxDistance() == Integer.MAX_VALUE);
 	}
 	
 	@Test
-	void testAddRooms() {
-		// tests adding a room
+	void testIfPerfect() {
+		// tests if maze is perfect
+		// setup
+		sorder.setBuilder(Builder.Eller);
+		sorder.setPerfect(true);
+		sorder.setSeed(0);
+		sorder.setSkillLevel(1);
+		mfactory.order(sorder);
+		mfactory.waitTillDelivered();
+		
+		Maze cur_maze = (MazeContainer)sorder.getMaze();
+		Floorplan f = cur_maze.getFloorplan();
+		int numwalls = cur_maze.getWidth() + cur_maze.getHeight() - 1;
+		for (int x = 0; x < cur_maze.getWidth(); x++) {
+			for (int y = 0; y < cur_maze.getHeight(); y++) {
+				if(f.hasWall(x, y, CardinalDirection.East))
+					numwalls++;
+				if(f.hasWall(x, y, CardinalDirection.South))
+					numwalls++;
+			}
+		}
+		assertTrue(numwalls == (cur_maze.getWidth() + 1) * (cur_maze.getHeight() + 1) - 1);
 	}
 	
 	@Test
-	void testNoLoops() {
-		// tests if there are any loops in a "perfect" maze
-	}
-	
-	@Test
-	void testSingleExit() {
-		// tests if there is only one exit
+	void testIfPerfectforRectangle() {
+		// tests if maze is perfect for rectangle maze
+		// setup
+		sorder.setBuilder(Builder.Prim);
+		sorder.setPerfect(true);
+		sorder.setSeed(0);
+		sorder.setSkillLevel(4);
+		mfactory.order(sorder);
+		mfactory.waitTillDelivered();
+		
+		Maze cur_maze = (MazeContainer)sorder.getMaze();
+		Floorplan f = cur_maze.getFloorplan();
+		int numwalls = cur_maze.getWidth() + cur_maze.getHeight();
+		for (int x = 0; x < cur_maze.getWidth(); x++) {
+			for (int y = 0; y < cur_maze.getHeight(); y++) {
+				if(f.hasWall(x, y, CardinalDirection.East))
+					numwalls++;
+				if(f.hasWall(x, y, CardinalDirection.South))
+					numwalls++;
+			}
+		}
+		assertTrue(numwalls == (cur_maze.getWidth() + 1) * (cur_maze.getHeight() + 1) - 1);
 	}
 
 }
