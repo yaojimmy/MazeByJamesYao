@@ -2,6 +2,9 @@ package generation;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.junit.jupiter.api.Test;
 
 import generation.Order.Builder;
@@ -118,6 +121,39 @@ class MazeFactoryTest {
 		
 		Maze m = (MazeContainer)sorder.getMaze();
 		assertTrue(m.getMazedists().getMaxDistance() < Integer.MAX_VALUE);
+	}
+	
+	@Test
+	void testCorrectNumberOfRooms() {
+		// tests if a level has the correct number of rooms
+		int skilllvl = 3;
+		sorder.setBuilder(Builder.Eller);
+		sorder.setPerfect(false);
+		sorder.setSeed(0);
+		sorder.setSkillLevel(skilllvl);
+		mfactory.order(sorder);
+		mfactory.waitTillDelivered();
+		
+		Maze m = (MazeContainer)sorder.getMaze();
+		// keep track of column numbers where leftmost part of a room is found
+		Set<Integer> leftmost = new HashSet<Integer>();
+		for (int y = 0; y < m.getHeight(); y++) {
+			// keeps track of when a room is found
+			Boolean found = false;
+			for (int x = 0; x < m.getWidth(); x++) {
+				if (m.getFloorplan().isInRoom(x, y)) {
+					if (!found) {
+						leftmost.add(x);
+						found = true;
+					}
+				}
+				else {
+					found = false;
+				}
+			}
+			
+		}
+		assertTrue(skilllvl == leftmost.size());
 	}
 
 }

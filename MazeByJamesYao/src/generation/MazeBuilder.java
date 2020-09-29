@@ -141,7 +141,7 @@ public class MazeBuilder implements Runnable {
 		// to prevent an infinite loop we limit the number of failed to MAX_TRIES == 250
 		int tries = 0 ;
 		int result = 0 ;
-		while (tries < MAX_TRIES && result <= rooms) {
+		while (tries < MAX_TRIES && result < rooms) {
 			if (placeRoom())
 				result++ ;
 			else
