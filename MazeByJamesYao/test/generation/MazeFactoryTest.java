@@ -91,5 +91,33 @@ class MazeFactoryTest {
 		}
 		assertTrue(numwalls == (cur_maze.getWidth() + 1) * (cur_maze.getHeight() + 1) - 1);
 	}
+	
+	@Test
+	void testExitReachablebyEveryPositionPerfect() {
+		// tests if exit is reachable by every position in a perfect maze
+		sorder.setBuilder(Builder.Eller);
+		sorder.setPerfect(true);
+		sorder.setSeed(0);
+		sorder.setSkillLevel(1);
+		mfactory.order(sorder);
+		mfactory.waitTillDelivered();
+		
+		Maze m = (MazeContainer)sorder.getMaze();
+		assertTrue(m.getMazedists().getMaxDistance() < Integer.MAX_VALUE);
+	}
+	
+	@Test
+	void testExitReachablebyEveryPositionNotPerfect() {
+		// tests if exit is reachable by every position in a not perfect maze
+		sorder.setBuilder(Builder.Eller);
+		sorder.setPerfect(false);
+		sorder.setSeed(0);
+		sorder.setSkillLevel(1);
+		mfactory.order(sorder);
+		mfactory.waitTillDelivered();
+		
+		Maze m = (MazeContainer)sorder.getMaze();
+		assertTrue(m.getMazedists().getMaxDistance() < Integer.MAX_VALUE);
+	}
 
 }
