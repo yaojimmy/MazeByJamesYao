@@ -4,17 +4,17 @@ import generation.CardinalDirection;
 import gui.Constants.UserInput;
 
 public class ReliableRobot implements Robot {
-	Controller c;
-	DistanceSensor rsensor;
-	DistanceSensor lsensor;
-	DistanceSensor fsensor;
-	DistanceSensor bsensor;
-	float[] battery_level;
-	int odometer_num;
-	float distance_sense = 1;
-	float quarter_turn = 3;
-	float step_forward = 6;
-	float jump_wall = 40;
+	private Controller c;
+	private DistanceSensor rsensor;
+	private DistanceSensor lsensor;
+	private DistanceSensor fsensor;
+	private DistanceSensor bsensor;
+	private float[] battery_level = new float[1];
+	private int odometer_num;
+	private float distance_sense = 1;
+	private float quarter_turn = 3;
+	private float step_forward = 6;
+	private float jump_wall = 40;
 
 	public ReliableRobot() {
 		
@@ -28,7 +28,13 @@ public class ReliableRobot implements Robot {
 		rsensor.setSensorDirection(Direction.RIGHT);
 		lsensor.setSensorDirection(Direction.LEFT);
 		fsensor.setSensorDirection(Direction.FORWARD);
-		rsensor.setSensorDirection(Direction.BACKWARD);
+		bsensor.setSensorDirection(Direction.BACKWARD);
+		
+		// set sensor mazes
+		rsensor.setMaze(c.getMazeConfiguration());
+		lsensor.setMaze(c.getMazeConfiguration());
+		fsensor.setMaze(c.getMazeConfiguration());
+		bsensor.setMaze(c.getMazeConfiguration());
 		
 		// set battery level to max
 		setBatteryLevel(3500);
@@ -60,7 +66,6 @@ public class ReliableRobot implements Robot {
 
 	@Override
 	public void setBatteryLevel(float level) {
-		battery_level = new float[1];
 		battery_level[0] = level;
 
 	}
@@ -72,12 +77,8 @@ public class ReliableRobot implements Robot {
 
 	@Override
 	public float getEnergyForStepForward() {
-		try {
-			if (0 == fsensor.distanceToObstacle(c.getCurrentPosition(), c.getCurrentDirection(), battery_level)) {
-				return jump_wall;
-			}
-		} catch (Exception e) {
-			return step_forward;
+		if (distanceToObstacle(Direction.FORWARD) == 0) {
+			return jump_wall;
 		}
 		return step_forward;
 	}
@@ -166,28 +167,32 @@ public class ReliableRobot implements Robot {
 	@Override
 	public int distanceToObstacle(Direction direction) throws UnsupportedOperationException {
 		if (direction == Direction.FORWARD) {
+			battery_level[0] = battery_level[0] - distance_sense;
 			try {
 				return fsensor.distanceToObstacle(c.getCurrentPosition(), c.getCurrentDirection(), battery_level);
 			} catch (Exception e) {
 				return Integer.MAX_VALUE;
 			}
 		}
-		if (direction == Direction.BACKWARD) {
+		else if (direction == Direction.BACKWARD) {
+			battery_level[0] = battery_level[0] - distance_sense;
 			try {
 				return bsensor.distanceToObstacle(c.getCurrentPosition(), c.getCurrentDirection(), battery_level);
 			} catch (Exception e) {
 				return Integer.MAX_VALUE;
 			}
 		}
-		if (direction == Direction.LEFT) {
+		else if (direction == Direction.LEFT) {
 			try {
+				battery_level[0] = battery_level[0] - distance_sense;
 				return lsensor.distanceToObstacle(c.getCurrentPosition(), c.getCurrentDirection(), battery_level);
 			} catch (Exception e) {
 				return Integer.MAX_VALUE;
 			}
 		}
-		if (direction == Direction.RIGHT) {
+		else if (direction == Direction.RIGHT) {
 			try {
+				battery_level[0] = battery_level[0] - distance_sense;
 				return rsensor.distanceToObstacle(c.getCurrentPosition(), c.getCurrentDirection(), battery_level);
 			} catch (Exception e) {
 				return Integer.MAX_VALUE;

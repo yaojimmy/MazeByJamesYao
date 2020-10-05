@@ -6,9 +6,9 @@ import generation.Wallboard;
 import gui.Robot.Direction;
 
 public class ReliableSensor implements DistanceSensor {
-	Maze m;
-	Direction d;
-	float energy_req = 1;
+	private Maze m;
+	private Direction d;
+	private float energy_req = 1;
 
 	public ReliableSensor() {
 		// nothing needed
@@ -39,10 +39,17 @@ public class ReliableSensor implements DistanceSensor {
 
 	}
 
+	public Maze getMaze() {
+		return m;
+	}
+	
 	@Override
 	public void setSensorDirection(Direction mountedDirection) {
 		d = mountedDirection;
-
+	}
+	
+	public Direction getSensorDirection() {
+		return d;
 	}
 
 	@Override
