@@ -19,15 +19,30 @@ public class ReliableSensor implements DistanceSensor {
 		int curdist = 0;
 		Wallboard w = new Wallboard(currentPosition[0], currentPosition[1], currentDirection);
 		while (m.getFloorplan().hasNoWall(w.getX(), w.getY(), w.getDirection())) {
-			if (w.getDirection() == CardinalDirection.North)
-				w.setLocationDirection(w.getX(), w.getY()-1, w.getDirection());
-			else if (w.getDirection() == CardinalDirection.South)
+			if (w.getDirection() == CardinalDirection.North) {
+				if (w.getY() + 1 >= m.getHeight())
+					return Integer.MAX_VALUE;
 				w.setLocationDirection(w.getX(), w.getY()+1, w.getDirection());
-			else if (w.getDirection() == CardinalDirection.East)
+				curdist++;
+			}
+			else if (w.getDirection() == CardinalDirection.South) {
+				if (w.getY() - 1 < 0)
+					return Integer.MAX_VALUE;
+				w.setLocationDirection(w.getX(), w.getY()-1, w.getDirection());
+				curdist++;
+			}
+			else if (w.getDirection() == CardinalDirection.East) {
+				if (w.getX() + 1 >= m.getWidth())
+					return Integer.MAX_VALUE;
 				w.setLocationDirection(w.getX()+1, w.getY(), w.getDirection());
-			else if (w.getDirection() == CardinalDirection.West)
+				curdist++;
+			}
+			else if (w.getDirection() == CardinalDirection.West) {
+				if (w.getX() - 1 < 0)
+					return Integer.MAX_VALUE;
 				w.setLocationDirection(w.getX()-1, w.getY(), w.getDirection());
-			curdist++;
+				curdist++;
+			}
 				
 		}
 		return curdist;

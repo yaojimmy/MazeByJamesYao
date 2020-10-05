@@ -1,6 +1,8 @@
 package gui;
 
+import generation.CardinalDirection;
 import generation.Maze;
+import gui.Robot.Turn;
 
 public class Wizard implements RobotDriver {
 	Robot rob;
@@ -50,7 +52,32 @@ public class Wizard implements RobotDriver {
 	 * can use sensors to determine where walls are
 	 */
 	private boolean wizard_alg() {
-		return false;
+		try {
+			int[] position = m.getNeighborCloserToExit(rob.getCurrentPosition()[0], rob.getCurrentPosition()[1]);
+			// find direction of position
+			CardinalDirection dir;
+			if (position[0] == rob.getCurrentPosition()[0]+1) {
+				dir = CardinalDirection.East;
+			}
+			else if (position[0] == rob.getCurrentPosition()[0]-1) {
+				dir = CardinalDirection.West;
+			}
+			else if (position[1] == rob.getCurrentPosition()[1]+1) {
+				dir = CardinalDirection.North;
+			}
+			else {
+				dir = CardinalDirection.South;
+			}
+			
+			while (dir != rob.getCurrentDirection()) {
+				rob.rotate(Turn.LEFT);
+			}
+			
+			rob.move(1);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
 	}
 
 	// returns total energy consumed
