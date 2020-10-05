@@ -8,7 +8,11 @@ import gui.Robot.Direction;
 public class ReliableSensor implements DistanceSensor {
 	Maze m;
 	Direction d;
+	float energy_req = 1;
 
+	public ReliableSensor() {
+		// nothing needed
+	}
 	@Override
 	public int distanceToObstacle(int[] currentPosition, CardinalDirection currentDirection, float[] powersupply)
 			throws Exception {
@@ -43,7 +47,7 @@ public class ReliableSensor implements DistanceSensor {
 
 	@Override
 	public float getEnergyConsumptionForSensing() {
-		return 1;
+		return energy_req;
 	}
 
 	@Override
