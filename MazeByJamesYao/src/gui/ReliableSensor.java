@@ -2,33 +2,48 @@ package gui;
 
 import generation.CardinalDirection;
 import generation.Maze;
+import generation.Wallboard;
 import gui.Robot.Direction;
 
 public class ReliableSensor implements DistanceSensor {
+	Maze m;
+	Direction d;
 
 	@Override
 	public int distanceToObstacle(int[] currentPosition, CardinalDirection currentDirection, float[] powersupply)
 			throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+		int curdist = 0;
+		Wallboard w = new Wallboard(currentPosition[0], currentPosition[1], currentDirection);
+		while (m.getFloorplan().hasNoWall(w.getX(), w.getY(), w.getDirection())) {
+			if (w.getDirection() == CardinalDirection.North)
+				w.setLocationDirection(w.getX(), w.getY()-1, w.getDirection());
+			else if (w.getDirection() == CardinalDirection.South)
+				w.setLocationDirection(w.getX(), w.getY()+1, w.getDirection());
+			else if (w.getDirection() == CardinalDirection.East)
+				w.setLocationDirection(w.getX()+1, w.getY(), w.getDirection());
+			else if (w.getDirection() == CardinalDirection.West)
+				w.setLocationDirection(w.getX()-1, w.getY(), w.getDirection());
+			curdist++;
+				
+		}
+		return curdist;
 	}
 
 	@Override
 	public void setMaze(Maze maze) {
-		// TODO Auto-generated method stub
+		m = maze;
 
 	}
 
 	@Override
 	public void setSensorDirection(Direction mountedDirection) {
-		// TODO Auto-generated method stub
+		d = mountedDirection;
 
 	}
 
 	@Override
 	public float getEnergyConsumptionForSensing() {
-		// TODO Auto-generated method stub
-		return 0;
+		return 1;
 	}
 
 	@Override

@@ -3,10 +3,11 @@ package gui;
 import generation.CardinalDirection;
 
 public class ReliableRobot implements Robot {
+	Controller c;
 
 	@Override
 	public void setController(Controller controller) {
-		// TODO Auto-generated method stub
+		c = controller;
 
 	}
 
