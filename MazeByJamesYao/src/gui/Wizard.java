@@ -18,6 +18,10 @@ public class Wizard implements RobotDriver {
 		energy_consumed = 0;
 		pathlength = 0;
 	}
+	
+	public Robot getRobot() {
+		return rob;
+	}
 
 	// sets maze
 	@Override
