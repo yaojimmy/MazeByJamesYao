@@ -3,6 +3,9 @@ package gui;
 import org.junit.jupiter.api.Test;
 
 import generation.CardinalDirection;
+import generation.MazeFactory;
+import generation.Order.Builder;
+import generation.StubOrder;
 import gui.Robot.Direction;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -38,7 +41,12 @@ class ReliableSensorTest {
 	void testDistanceToObstacle() {
 		c = new Controller();
 		s = new ReliableSensor();
-		s.setMaze(c.getMazeConfiguration());
+		MazeFactory mf = new MazeFactory();
+		StubOrder sorder = new StubOrder();
+		sorder.setBuilder(Builder.DFS);
+		mf.order(sorder);
+		mf.waitTillDelivered();
+		s.setMaze(sorder.getMaze());
 		s.setSensorDirection(Direction.FORWARD);
 		int[] position = {0, 0};
 		float[] powersupply = {3500};
