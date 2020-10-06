@@ -186,6 +186,14 @@ public class Controller {
         currentState = states[2];
         currentState.setMazeConfiguration(config);
         currentState.start(this, panel);
+        try {
+        	this.getDriver().setMaze(config);
+        	this.getRobot().setController(this);
+			this.getDriver().drive2Exit();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
     /**
      * Switches the controller to the final screen

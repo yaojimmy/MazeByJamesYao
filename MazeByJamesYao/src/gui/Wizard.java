@@ -2,6 +2,7 @@ package gui;
 
 import generation.CardinalDirection;
 import generation.Maze;
+import gui.Robot.Direction;
 import gui.Robot.Turn;
 
 public class Wizard implements RobotDriver {
@@ -36,6 +37,18 @@ public class Wizard implements RobotDriver {
 			if(!drive1Step2Exit())
 				return false;
 		}
+		// moving into the exit
+		if (rob.canSeeThroughTheExitIntoEternity(Direction.FORWARD)) {
+			rob.move(1);
+		}
+		if (rob.canSeeThroughTheExitIntoEternity(Direction.LEFT)) {
+			rob.rotate(Turn.LEFT);
+			rob.move(1);
+		}
+		if (rob.canSeeThroughTheExitIntoEternity(Direction.RIGHT)) {
+			rob.rotate(Turn.RIGHT);
+			rob.move(1);
+		}
 		return true;
 	}
 
@@ -63,17 +76,21 @@ public class Wizard implements RobotDriver {
 				dir = CardinalDirection.West;
 			}
 			else if (position[1] == rob.getCurrentPosition()[1]+1) {
-				dir = CardinalDirection.North;
+				dir = CardinalDirection.South;
 			}
 			else {
-				dir = CardinalDirection.South;
+				dir = CardinalDirection.North;
 			}
 			
 			while (dir != rob.getCurrentDirection()) {
 				rob.rotate(Turn.LEFT);
 			}
-			
-			rob.move(1);
+			if (rob.distanceToObstacle(Direction.FORWARD) == 0) {
+				rob.jump();
+			}
+			else {
+				rob.move(1);
+			}
 			return true;
 		} catch (Exception e) {
 			return false;

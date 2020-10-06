@@ -80,6 +80,13 @@ public class MazeApplication extends JFrame {
 	    	result.setBuilder(Order.Builder.Eller);
 	        // throw new RuntimeException("Don't know anybody named Eller ...");
 	    }
+	    else if ("Wizard".equalsIgnoreCase(parameter))
+	    {
+	    	Robot r = new ReliableRobot();
+	    	RobotDriver dr = new Wizard();
+	    	dr.setRobot(r);
+	    	result.setRobotAndDriver(r, dr);
+	    }
 	    // Case 4: a file
 	    else {
 	        File f = new File(parameter) ;

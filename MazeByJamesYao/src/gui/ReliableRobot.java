@@ -30,12 +30,6 @@ public class ReliableRobot implements Robot {
 		fsensor.setSensorDirection(Direction.FORWARD);
 		bsensor.setSensorDirection(Direction.BACKWARD);
 		
-		// set sensor mazes
-		rsensor.setMaze(c.getMazeConfiguration());
-		lsensor.setMaze(c.getMazeConfiguration());
-		fsensor.setMaze(c.getMazeConfiguration());
-		bsensor.setMaze(c.getMazeConfiguration());
-		
 		// set battery level to max
 		setBatteryLevel(3500);
 		
@@ -46,7 +40,17 @@ public class ReliableRobot implements Robot {
 	@Override
 	public void setController(Controller controller) {
 		c = controller;
+		
+		// set sensor mazes
+		rsensor.setMaze(controller.getMazeConfiguration());
+		lsensor.setMaze(controller.getMazeConfiguration());
+		fsensor.setMaze(controller.getMazeConfiguration());
+		bsensor.setMaze(controller.getMazeConfiguration());
 
+	}
+	
+	public Controller getController() {
+		return c;
 	}
 
 	@Override
@@ -117,8 +121,10 @@ public class ReliableRobot implements Robot {
 			if (hasStopped() == true)
 				break;
 			else {
-				c.keyDown(UserInput.Up, 0);
 				battery_level[0] = battery_level[0] - step_forward;
+				if (hasStopped() == true)
+					break;
+				c.keyDown(UserInput.Up, 0);
 			}
 		}
 
@@ -159,43 +165,50 @@ public class ReliableRobot implements Robot {
 			if (fsensor.distanceToObstacle(c.getCurrentPosition(), c.getCurrentDirection(), battery_level) == 0)
 			return true;
 		} catch (Exception e) {
-			return true;
+			return false;
 		}
 		return false;
 	}
 
 	@Override
 	public int distanceToObstacle(Direction direction) throws UnsupportedOperationException {
+		CardinalDirection thisdar = c.getCurrentDirection();
 		if (direction == Direction.FORWARD) {
 			battery_level[0] = battery_level[0] - distance_sense;
 			try {
-				return fsensor.distanceToObstacle(c.getCurrentPosition(), c.getCurrentDirection(), battery_level);
+				return fsensor.distanceToObstacle(c.getCurrentPosition(), thisdar, battery_level);
 			} catch (Exception e) {
-				return Integer.MAX_VALUE;
+				return 0;
 			}
 		}
 		else if (direction == Direction.BACKWARD) {
 			battery_level[0] = battery_level[0] - distance_sense;
 			try {
-				return bsensor.distanceToObstacle(c.getCurrentPosition(), c.getCurrentDirection(), battery_level);
+				thisdar = thisdar.rotateClockwise();
+				thisdar = thisdar.rotateClockwise();
+				return bsensor.distanceToObstacle(c.getCurrentPosition(), thisdar, battery_level);
 			} catch (Exception e) {
-				return Integer.MAX_VALUE;
+				return 0;
 			}
 		}
 		else if (direction == Direction.LEFT) {
+			battery_level[0] = battery_level[0] - distance_sense;
 			try {
-				battery_level[0] = battery_level[0] - distance_sense;
-				return lsensor.distanceToObstacle(c.getCurrentPosition(), c.getCurrentDirection(), battery_level);
+				thisdar = thisdar.rotateClockwise();
+				return lsensor.distanceToObstacle(c.getCurrentPosition(), thisdar, battery_level);
 			} catch (Exception e) {
-				return Integer.MAX_VALUE;
+				return 0;
 			}
 		}
 		else if (direction == Direction.RIGHT) {
+			battery_level[0] = battery_level[0] - distance_sense;
 			try {
-				battery_level[0] = battery_level[0] - distance_sense;
-				return rsensor.distanceToObstacle(c.getCurrentPosition(), c.getCurrentDirection(), battery_level);
+				thisdar = thisdar.rotateClockwise();
+				thisdar = thisdar.rotateClockwise();
+				thisdar = thisdar.rotateClockwise();
+				return rsensor.distanceToObstacle(c.getCurrentPosition(), thisdar, battery_level);
 			} catch (Exception e) {
-				return Integer.MAX_VALUE;
+				return 0;
 			}
 		}
 		return 0;
