@@ -24,11 +24,19 @@ public class WallFollower implements RobotDriver {
 		rob = r;
 
 	}
+	
+	public Robot getRobot() {
+		return rob;
+	}
 
 	@Override
 	public void setMaze(Maze maze) {
 		m = maze;
 
+	}
+	
+	public Maze getMaze() {
+		return m;
 	}
 
 	@Override
