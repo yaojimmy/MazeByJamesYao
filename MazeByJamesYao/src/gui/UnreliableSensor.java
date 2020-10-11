@@ -7,7 +7,7 @@ package gui;
  * @author jamesyao
  *
  */
-public class UnreliableSensor extends ReliableSensor implements Runnable {
+public class UnreliableSensor extends ReliableSensor implements Runnable, DistanceSensor {
 	private boolean operational;
 
 	public UnreliableSensor() {

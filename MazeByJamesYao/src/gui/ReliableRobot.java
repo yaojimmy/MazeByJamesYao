@@ -221,6 +221,38 @@ public class ReliableRobot implements Robot {
 		}
 		return false;
 	}
+	
+	public void setLSensor(DistanceSensor sensor) {
+		lsensor = sensor;
+	}
+	
+	public DistanceSensor getLSensor() {
+		return lsensor;
+	}
+	
+	public void setRSensor(DistanceSensor sensor) {
+		rsensor = sensor;
+	}
+	
+	public DistanceSensor getRSensor() {
+		return rsensor;
+	}
+	
+	public void setFSensor(DistanceSensor sensor) {
+		fsensor = sensor;
+	}
+	
+	public DistanceSensor getFSensor() {
+		return fsensor;
+	}
+	
+	public void setBSensor(DistanceSensor sensor) {
+		bsensor = sensor;
+	}
+	
+	public DistanceSensor getBSensor() {
+		return bsensor;
+	}
 
 	@Override
 	public void startFailureAndRepairProcess(Direction direction, int meanTimeBetweenFailures, int meanTimeToRepair)
