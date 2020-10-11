@@ -7,7 +7,7 @@ package gui;
  * @author jamesyao
  *
  */
-public class UnreliableSensor extends ReliableSensor implements DistanceSensor {
+public class UnreliableSensor extends ReliableSensor implements Runnable {
 	private boolean operational;
 
 	public UnreliableSensor() {
@@ -16,9 +16,25 @@ public class UnreliableSensor extends ReliableSensor implements DistanceSensor {
 	}
 	
 	/**
+	 * 
+	 * @param isOperational sets operational state
+	 */
+	public void setOperational(boolean isOperational) {
+		operational = isOperational;
+	}
+	
+	/**
+	 * 
+	 * @return returns operational state
+	 */
+	public boolean getOperational() {
+		return operational;
+	}
+	
+	/**
 	 * goes through failure and repair process
-	 * @param time between failures
-	 * @param time before operational again
+	 * @param meanTimeBetweenFailures time between failures
+	 * @param meanTimeToRepair time before sensor becomes operational again
 	 */
 	public void startFailureAndRepairProcess(int meanTimeBetweenFailures, int meanTimeToRepair)
 			throws UnsupportedOperationException {
@@ -32,6 +48,12 @@ public class UnreliableSensor extends ReliableSensor implements DistanceSensor {
 	public void stopFailureAndRepairProcess() throws UnsupportedOperationException {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
