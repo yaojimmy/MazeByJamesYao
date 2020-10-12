@@ -12,6 +12,7 @@ public class UnreliableSensor extends ReliableSensor implements Runnable, Distan
 
 	public UnreliableSensor() {
 		// starts in operational state
+		super();
 		operational = true;
 	}
 	
