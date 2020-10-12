@@ -4,6 +4,7 @@
 package gui;
 
 import generation.Order;
+import gui.Robot.Direction;
 
 import java.awt.event.KeyListener;
 import java.io.File;
@@ -268,18 +269,26 @@ public class MazeApplication extends JFrame {
 		    	// iterate through characters of following string
 		    	for (int charindex = 0; charindex < parameters[strindex+1].length(); charindex++) {
 		    		// if 0, set corresponding sensor to UnreliableSensor
-		    		if (parameters[strindex+1].indexOf(charindex) == '0') {
+		    		if (parameters[strindex+1].charAt(charindex) == '0') {
 		    			UnreliableSensor s = new UnreliableSensor();
 		    			if (charindex == 0) {
+		    				msg = msg + "Forward sensor is unreliable.\n";
+		    				s.setSensorDirection(Direction.FORWARD);
 		    				r.setFSensor(s);
 		    			}
 		    			if (charindex == 1) {
+		    				msg = msg + "Left sensor is unreliable.\n";
+		    				s.setSensorDirection(Direction.LEFT);
 		    				r.setLSensor(s);
 		    			}
 		    			if (charindex == 2) {
+		    				msg = msg + "Right sensor is unreliable.\n";
+		    				s.setSensorDirection(Direction.RIGHT);
 		    				r.setRSensor(s);
 		    			}
 		    			if (charindex == 3) {
+		    				msg = msg + "Backward sensor is unreliable.\n";
+		    				s.setSensorDirection(Direction.BACKWARD);
 		    				r.setBSensor(s);
 		    			}
 		    		}
