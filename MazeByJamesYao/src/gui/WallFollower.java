@@ -43,13 +43,27 @@ public class WallFollower implements RobotDriver {
 
 	@Override
 	public boolean drive2Exit() throws Exception {
-		// TODO Auto-generated method stub
-		return false;
+		while(!rob.isAtExit()) {
+			if(!drive1Step2Exit())
+				return false;
+		}
+		// moving into the exit
+		if (rob.canSeeThroughTheExitIntoEternity(Direction.FORWARD)) {
+			rob.move(1);
+		}
+		if (rob.canSeeThroughTheExitIntoEternity(Direction.LEFT)) {
+			rob.rotate(Turn.LEFT);
+			rob.move(1);
+		}
+		if (rob.canSeeThroughTheExitIntoEternity(Direction.RIGHT)) {
+			rob.rotate(Turn.RIGHT);
+			rob.move(1);
+		}
+		return true;
 	}
 
 	@Override
 	public boolean drive1Step2Exit() throws Exception {
-		// TODO Auto-generated method stub
 		return wallFollowerAlg();
 	}
 	
