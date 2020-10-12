@@ -109,7 +109,8 @@ public class ReliableRobot implements Robot {
 			battery_level[0] = battery_level[0] - quarter_turn;
 		}
 		else if (turn == Turn.AROUND) {
-			c.keyDown(UserInput.Down, 0);
+			c.keyDown(UserInput.Left, 0);
+			c.keyDown(UserInput.Left, 0);
 			battery_level[0] = battery_level[0] - (2 *quarter_turn);
 		}
 		
