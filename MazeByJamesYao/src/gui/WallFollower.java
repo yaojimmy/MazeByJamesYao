@@ -1,6 +1,8 @@
 package gui;
 
 import generation.Maze;
+import gui.Robot.Direction;
+import gui.Robot.Turn;
 
 /**
  * Solves maze by following the left wall
@@ -48,16 +50,48 @@ public class WallFollower implements RobotDriver {
 	@Override
 	public boolean drive1Step2Exit() throws Exception {
 		// TODO Auto-generated method stub
-		return false;
+		return wallFollowerAlg();
 	}
 	
 	/**
 	 * algorithm for following left wall
+	 * if no left wall, turn left
+	 * if left wall, move forward
+	 * if wall ahead, move right
+	 * if wall right, turn around and move forward
 	 * @return true if moves, false if doesn't
 	 */
-	private boolean wallFollowerAlg() {
-		// TODO Implement algorithm
-		return false;
+	private boolean wallFollowerAlg() throws Exception {
+		// if there is a wall left, check for other walls
+		if (rob.distanceToObstacle(Direction.LEFT) == 0) {
+			
+			// if there is a wall forward, check for other walls
+			if (rob.distanceToObstacle(Direction.FORWARD) == 0) {
+				// if there is a wall right, rotate around and move forward
+				if (rob.distanceToObstacle(Direction.RIGHT) == 0) {
+					rob.rotate(Turn.AROUND);
+					rob.move(1);
+					return true;
+				}
+				// if no wall right, rotate right and move forward
+				else {
+					rob.rotate(Turn.RIGHT);
+					rob.move(1);
+					return true;
+				}
+			}
+			// if no wall forward, move forward
+			else {
+				rob.move(1);
+				return true;
+			}
+		}
+		// if no wall left, rotate left and move forward
+		else {
+			rob.rotate(Turn.LEFT);
+			rob.move(1);
+			return true;
+		}
 	}
 
 	@Override
