@@ -13,6 +13,7 @@ public class UnreliableSensor extends ReliableSensor implements Runnable, Distan
 	private boolean operational;
 	private int timeToRepair;
 	private int timeBetweenFailures;
+	Thread failureRepair;
 
 	public UnreliableSensor() {
 		// starts in operational state
@@ -55,11 +56,13 @@ public class UnreliableSensor extends ReliableSensor implements Runnable, Distan
 	 */
 	public void startFailureAndRepairProcess(int meanTimeBetweenFailures, int meanTimeToRepair)
 			throws UnsupportedOperationException {
-		Thread failureRepair = new Thread(this);
-		operational = true;
-		timeToRepair = meanTimeToRepair;
-		timeBetweenFailures = meanTimeBetweenFailures;
-		failureRepair.start();
+		if (failureRepair == null) {
+			failureRepair = new Thread(this);
+			operational = true;
+			timeToRepair = meanTimeToRepair;
+			timeBetweenFailures = meanTimeBetweenFailures;
+			failureRepair.start();
+		}
 	}
 	
 	/**
@@ -67,20 +70,21 @@ public class UnreliableSensor extends ReliableSensor implements Runnable, Distan
 	 */
 	public void stopFailureAndRepairProcess() throws UnsupportedOperationException {
 		operational = true;
-		Thread.interrupted();
+		failureRepair.interrupt();
 	}
 
 	@Override
 	public void run() {
-		operational = false;
-		try {
-			Thread.sleep(timeToRepair * 1000);
-		} catch (InterruptedException e) {}
-		stopFailureAndRepairProcess();
-		try {
-			Thread.sleep(timeBetweenFailures * 1000);
-		} catch (InterruptedException e) {}
-		
+		while (true) {
+			try {
+				operational = false;
+				Thread.sleep(timeToRepair * 1000);
+			} catch (InterruptedException e) {}
+			try {
+				operational = true;
+				Thread.sleep(timeBetweenFailures * 1000);
+			} catch (InterruptedException e) {}
+		}
 	}
 
 }

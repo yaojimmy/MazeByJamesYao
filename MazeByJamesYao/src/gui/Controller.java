@@ -1,6 +1,7 @@
 package gui;
 
 import gui.Constants.UserInput;
+import gui.Robot.Direction;
 
 import java.util.Random;
 
@@ -189,11 +190,12 @@ public class Controller {
         try {
         	this.getDriver().setMaze(config);
         	this.getRobot().setController(this);
+        	for (Direction dir: Direction.values()) {
+        		this.getRobot().startFailureAndRepairProcess(dir, 4, 2);
+        		Thread.sleep(1300);
+        	}
 			this.getDriver().drive2Exit();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} catch (Exception e) {}
     }
     /**
      * Switches the controller to the final screen

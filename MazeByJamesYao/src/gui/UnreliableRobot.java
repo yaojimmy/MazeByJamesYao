@@ -1,8 +1,5 @@
 package gui;
 
-import generation.CardinalDirection;
-import gui.Robot.Direction;
-
 /**
  * Extends all functionality of ReliableRobot, with some sensors being unreliable
  * Uses ReliableRobot's setSensor methods to set unreliable sensors
@@ -15,6 +12,7 @@ public class UnreliableRobot extends ReliableRobot implements Robot, Runnable {
 	private int timeBetweenFailures;
 	private int timeToRepair;
 	private Direction failingSensorDir;
+	private Thread failureRepair;
 
 	public UnreliableRobot() {
 		super();
@@ -33,7 +31,6 @@ public class UnreliableRobot extends ReliableRobot implements Robot, Runnable {
 		
 		// if sensor did not work, identify a working sensor
 		if (distance == Integer.MAX_VALUE) {
-			CardinalDirection thisdar = this.getController().getCurrentDirection();
 			Direction dir = identifyWorkingSensor();
 			// calculate number of left rotations needed to move sensor to sensing direction
 			int numRotations = relateDirections(direction, dir);
@@ -143,7 +140,7 @@ public class UnreliableRobot extends ReliableRobot implements Robot, Runnable {
 	 */
 	public void startFailureAndRepairProcess(Direction direction, int meanTimeBetweenFailures, int meanTimeToRepair)
 			throws UnsupportedOperationException {
-		Thread failureRepair = new Thread(this);
+		failureRepair = new Thread(this);
 		timeToRepair = meanTimeToRepair;
 		timeBetweenFailures = meanTimeBetweenFailures;
 		failingSensorDir = direction;
@@ -167,6 +164,7 @@ public class UnreliableRobot extends ReliableRobot implements Robot, Runnable {
 		if (direction == Direction.BACKWARD) {
 			this.getFSensor().stopFailureAndRepairProcess();
 		}
+		failureRepair.interrupt();
 
 	}
 
