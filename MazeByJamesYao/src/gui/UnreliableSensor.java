@@ -67,15 +67,19 @@ public class UnreliableSensor extends ReliableSensor implements Runnable, Distan
 	 */
 	public void stopFailureAndRepairProcess() throws UnsupportedOperationException {
 		operational = true;
+		Thread.interrupted();
 	}
 
 	@Override
 	public void run() {
 		operational = false;
 		try {
-			Thread.sleep(timeToRepair*1000);
+			Thread.sleep(timeToRepair * 1000);
 		} catch (InterruptedException e) {}
 		stopFailureAndRepairProcess();
+		try {
+			Thread.sleep(timeBetweenFailures * 1000);
+		} catch (InterruptedException e) {}
 		
 	}
 
