@@ -32,7 +32,7 @@ public class UnreliableSensor extends ReliableSensor implements Runnable, Distan
 	 * 
 	 * @return returns operational state
 	 */
-	public boolean getOperational() {
+	public boolean isOperational() {
 		return operational;
 	}
 	

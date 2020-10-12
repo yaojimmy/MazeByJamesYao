@@ -86,6 +86,10 @@ public class ReliableRobot implements Robot {
 		}
 		return step_forward;
 	}
+	
+	public float getEnergyForSensing() {
+		return distance_sense;
+	}
 
 	@Override
 	public int getOdometerReading() {
@@ -95,7 +99,6 @@ public class ReliableRobot implements Robot {
 	@Override
 	public void resetOdometer() {
 		odometer_num = 0;
-
 	}
 
 	@Override
@@ -179,7 +182,7 @@ public class ReliableRobot implements Robot {
 			try {
 				return fsensor.distanceToObstacle(c.getCurrentPosition(), thisdar, battery_level);
 			} catch (Exception e) {
-				return 0;
+				return Integer.MAX_VALUE;
 			}
 		}
 		else if (direction == Direction.BACKWARD) {
@@ -189,7 +192,7 @@ public class ReliableRobot implements Robot {
 				thisdar = thisdar.rotateClockwise();
 				return bsensor.distanceToObstacle(c.getCurrentPosition(), thisdar, battery_level);
 			} catch (Exception e) {
-				return 0;
+				return Integer.MAX_VALUE;
 			}
 		}
 		else if (direction == Direction.LEFT) {
@@ -198,7 +201,7 @@ public class ReliableRobot implements Robot {
 				thisdar = thisdar.rotateClockwise();
 				return lsensor.distanceToObstacle(c.getCurrentPosition(), thisdar, battery_level);
 			} catch (Exception e) {
-				return 0;
+				return Integer.MAX_VALUE;
 			}
 		}
 		else if (direction == Direction.RIGHT) {
@@ -209,10 +212,10 @@ public class ReliableRobot implements Robot {
 				thisdar = thisdar.rotateClockwise();
 				return rsensor.distanceToObstacle(c.getCurrentPosition(), thisdar, battery_level);
 			} catch (Exception e) {
-				return 0;
+				return Integer.MAX_VALUE;
 			}
 		}
-		return 0;
+		return Integer.MAX_VALUE;
 	}
 
 	@Override
