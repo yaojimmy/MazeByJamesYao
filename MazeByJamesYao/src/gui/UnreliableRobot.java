@@ -128,6 +128,7 @@ public class UnreliableRobot extends ReliableRobot implements Robot, Runnable {
 				return dir;
 		}
 		try {
+			// Strategy B: wait until a working sensor becomes available
 			Thread.sleep(300);
 		} catch (InterruptedException e) {}
 		return identifyWorkingSensor();
