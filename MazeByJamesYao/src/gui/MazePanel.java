@@ -4,7 +4,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Panel;
-import java.awt.RenderingHints;
 
 /**
  * Add functionality for double buffering to an AWT Panel class.
@@ -13,7 +12,7 @@ import java.awt.RenderingHints;
  * @author Peter Kemper
  *
  */
-public class MazePanel extends Panel  {
+public class MazePanel extends Panel implements P5Panel {
 	private static final long serialVersionUID = 2787329533730973905L;
 	/* Panel operates a double buffer see
 	 * http://www.codeproject.com/Articles/2136/Double-buffer-in-standard-Java-AWT
@@ -97,13 +96,138 @@ public class MazePanel extends Panel  {
 				// For drawing in FirstPersonDrawer, setting rendering hint
 				// became necessary when lines of polygons 
 				// that were not horizontal or vertical looked ragged
-				graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 						RenderingHints.VALUE_ANTIALIAS_ON);
-				graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+				setRenderingHint(RenderingHints.KEY_INTERPOLATION,
 						RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 			}
 		}
 		return graphics;
+	}
+
+	@Override
+	public void commit() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean isOperational() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void setColor(int rgb) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int getColor() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getWallColor(int distance, int cc, int extensionX) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void addBackground(float percentToExit) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addFilledRectangle(int x, int y, int width, int height) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addFilledPolygon(int[] xPoints, int[] yPoints, int nPoints) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addPolygon(int[] xPoints, int[] yPoints, int nPoints) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addLine(int startX, int startY, int endX, int endY) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addFilledOval(int x, int y, int width, int height) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addArc(int x, int y, int width, int height, int startAngle, int arcAngle) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addMarker(float x, float y, String str) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/**
+	 * uses the java.awt.RenderingHints keys and values that correspond to the enumerated values
+	 * @param hintKey an enumerated RenderingHints key
+	 * @param hintValue an enumerated RenderingHints value
+	 */
+	@Override
+	public void setRenderingHint(RenderingHints hintKey, RenderingHints hintValue) {
+		switch (hintKey) {
+		case KEY_RENDERING:
+			if (hintValue == RenderingHints.VALUE_ANTIALIAS_ON) {
+				graphics.setRenderingHint(java.awt.RenderingHints.KEY_RENDERING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+			}
+			else if (hintValue == RenderingHints.VALUE_INTERPOLATION_BILINEAR) {
+				graphics.setRenderingHint(java.awt.RenderingHints.KEY_RENDERING, java.awt.RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+			}
+			else {
+				graphics.setRenderingHint(java.awt.RenderingHints.KEY_RENDERING, java.awt.RenderingHints.VALUE_RENDER_QUALITY);
+			}
+			break;
+		case KEY_INTERPOLATION:
+			if (hintValue == RenderingHints.VALUE_ANTIALIAS_ON) {
+				graphics.setRenderingHint(java.awt.RenderingHints.KEY_INTERPOLATION, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+			}
+			else if (hintValue == RenderingHints.VALUE_INTERPOLATION_BILINEAR) {
+				graphics.setRenderingHint(java.awt.RenderingHints.KEY_INTERPOLATION, java.awt.RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+			}
+			else {
+				graphics.setRenderingHint(java.awt.RenderingHints.KEY_INTERPOLATION, java.awt.RenderingHints.VALUE_RENDER_QUALITY);
+			}
+			break;
+		case KEY_ANTIALIASING:
+			if (hintValue == RenderingHints.VALUE_ANTIALIAS_ON) {
+				graphics.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+			}
+			else if (hintValue == RenderingHints.VALUE_INTERPOLATION_BILINEAR) {
+				graphics.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+			}
+			else {
+				graphics.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_RENDER_QUALITY);
+			}
+			break;
+		default:
+			break;
+		}
+		
 	}
 
 }
