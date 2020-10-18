@@ -216,15 +216,74 @@ public class MazePanel extends Panel implements P5Panel {
 		return col.getRGB();
 	}
 
+	// to get the height and width for drawing the background
+	private int viewWidth;
+	private int viewHeight;
+	
+	public void setWidth(int width) {
+		viewWidth = width;
+	}
+	public int getWidth() {
+		return viewWidth;
+	}
+	public void setHeight(int height) {
+		viewHeight = height;
+	}
+	public int getHeight() {
+		return viewHeight;
+	}
+	
 	@Override
 	public void addBackground(float percentToExit) {
 		// TODO Auto-generated method stub
-		
+		// black rectangle in upper half of screen
+		graphics.setColor(getBackgroundColor(percentToExit, true));
+		graphics.fillRect(0, 0, viewWidth, viewHeight/2);
+		// grey rectangle in lower half of screen
+		graphics.setColor(getBackgroundColor(percentToExit, false));
+		graphics.fillRect(0, viewHeight/2, viewWidth, viewHeight/2);
 	}
+	
+	// colors for background
+	static final Color greenWM = Color.decode("#115740");
+	static final Color goldWM = Color.decode("#916f41");
+	static final Color yellowWM = Color.decode("#FFFF99");
+	/**
+	 * Determine the background color for the top and bottom
+	 * rectangle as a blend between starting color settings
+	 * of black and grey towards gold and green as final
+	 * color settings close to the exit
+	 * @param percentToExit
+	 * @param top is true for the top triangle, false for the bottom
+	 * @return the color to use for the background rectangle
+	 */
+	private Color getBackgroundColor(float percentToExit, boolean top) {
+		return top? blend(yellowWM, goldWM, percentToExit) : 
+			blend(Color.lightGray, greenWM, percentToExit);
+	}
+	
+	/**
+	 * Calculates the weighted average of the two given colors
+	 * @param c0 the one color
+	 * @param c1 the other color
+	 * @param weight0 of c0
+	 * @return blend of colors c0 and c1 as weighted average
+	 */
+	private Color blend(Color c0, Color c1, double weight0) {
+		if (weight0 < 0.1)
+			return c1;
+		if (weight0 > 0.95)
+			return c0;
+	    double r = weight0 * c0.getRed() + (1-weight0) * c1.getRed();
+	    double g = weight0 * c0.getGreen() + (1-weight0) * c1.getGreen();
+	    double b = weight0 * c0.getBlue() + (1-weight0) * c1.getBlue();
+	    double a = Math.max(c0.getAlpha(), c1.getAlpha());
+
+	    return new Color((int) r, (int) g, (int) b, (int) a);
+	  }
 
 	@Override
 	public void addFilledRectangle(int x, int y, int width, int height) {
-		// TODO Auto-generated method stub
 		graphics.fillRect(x, y, width, height);
 	}
 
