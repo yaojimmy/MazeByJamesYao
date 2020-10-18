@@ -233,6 +233,14 @@ public class MazePanel extends Panel implements P5Panel {
 		return viewHeight;
 	}
 	
+	/**
+	 * Draws two solid rectangles to provide a background.
+	 * Note that this also erases previous drawings of maze or map.
+	 * The color setting adjusts to the distance to the exit to 
+	 * provide an additional clue for the user.
+	 * Colors transition from black to gold and from grey to green.
+	 * @param percentToExit gives the distance to exit
+	 */
 	@Override
 	public void addBackground(float percentToExit) {
 		// TODO Auto-generated method stub

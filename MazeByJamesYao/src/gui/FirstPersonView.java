@@ -4,7 +4,6 @@
 package gui;
 
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 
@@ -157,13 +156,14 @@ public class FirstPersonView {
 	 */
 	public void draw(MazePanel panel, int x, int y, int walkStep, int ang, float percentToExit) {
 		// obtain a Graphics2D object we can draw on
-		Graphics g = panel.getBufferGraphics() ;
+		panel.getBufferGraphics() ;
+		panel.setHeight(viewHeight);
+		panel.setWidth(viewWidth);
         // viewers draw on the buffer graphics
-        if (null == g) {
+        if (!panel.isOperational()) {
             System.out.println("FirstPersonDrawer.draw: can't get graphics object to draw on, skipping redraw operation") ;
             return;
         }
-        gc = (Graphics2D) g ;
         
         // update fields angle, viewx, viewy for current position and viewing angle
         angle = ang ;
@@ -171,9 +171,9 @@ public class FirstPersonView {
         
         // update graphics
         // draw background figure: black on bottom half, grey on top half
-        drawBackground(g, percentToExit);
+        panel.addBackground(percentToExit);
         // set color to white and draw what ever can be seen from the current position
-        g.setColor(Color.white);
+        panel.setColor(Color.white.getRGB());
         // reset the set of ranges to a single new element (0,width-1)
         // to cover the full width of the view 
         // as we have not drawn any polygons (walls) yet.
@@ -209,60 +209,7 @@ public class FirstPersonView {
 		viewX = (x*mapUnit+mapUnit/2) + unscaleViewD(getViewDX(angle)*factor);
         viewY = (y*mapUnit+mapUnit/2) + unscaleViewD(getViewDY(angle)*factor);
 	}
-	/**
-	 * Draws two solid rectangles to provide a background.
-	 * Note that this also erases previous drawings of maze or map.
-	 * The color setting adjusts to the distance to the exit to 
-	 * provide an additional clue for the user.
-	 * Colors transition from black to gold and from grey to green.
-	 * @param graphics to draw on, must be not null
-	 * @param percentToExit gives the distance to exit
-	 */
-	private void drawBackground(Graphics graphics, float percentToExit) {
-		// black rectangle in upper half of screen
-		// graphics.setColor(Color.black);
-		// dynamic color setting: 
-		graphics.setColor(getBackgroundColor(percentToExit, true));
-		graphics.fillRect(0, 0, viewWidth, viewHeight/2);
-		// grey rectangle in lower half of screen
-		// graphics.setColor(Color.darkGray);
-		// dynamic color setting: 
-		graphics.setColor(getBackgroundColor(percentToExit, false));
-		graphics.fillRect(0, viewHeight/2, viewWidth, viewHeight/2);
-	}
 	
-	/**
-	 * Determine the background color for the top and bottom
-	 * rectangle as a blend between starting color settings
-	 * of black and grey towards gold and green as final
-	 * color settings close to the exit
-	 * @param percentToExit
-	 * @param top is true for the top triangle, false for the bottom
-	 * @return the color to use for the background rectangle
-	 */
-	private Color getBackgroundColor(float percentToExit, boolean top) {
-		return top? blend(yellowWM, goldWM, percentToExit) : 
-			blend(Color.lightGray, greenWM, percentToExit);
-	}
-	/**
-	 * Calculates the weighted average of the two given colors
-	 * @param c0 the one color
-	 * @param c1 the other color
-	 * @param weight0 of c0
-	 * @return blend of colors c0 and c1 as weighted average
-	 */
-	private Color blend(Color c0, Color c1, double weight0) {
-		if (weight0 < 0.1)
-			return c1;
-		if (weight0 > 0.95)
-			return c0;
-	    double r = weight0 * c0.getRed() + (1-weight0) * c1.getRed();
-	    double g = weight0 * c0.getGreen() + (1-weight0) * c1.getGreen();
-	    double b = weight0 * c0.getBlue() + (1-weight0) * c1.getBlue();
-	    double a = Math.max(c0.getAlpha(), c1.getAlpha());
-
-	    return new Color((int) r, (int) g, (int) b, (int) a);
-	  }
 	/**
 	 * Recursive method to explore tree of BSP nodes and draw all walls in leaf nodes 
 	 * where the bounding box is visible
