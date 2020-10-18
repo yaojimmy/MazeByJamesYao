@@ -224,8 +224,7 @@ public class MazePanel extends Panel implements P5Panel {
 
 	@Override
 	public void addArc(int x, int y, int width, int height, int startAngle, int arcAngle) {
-		// TODO Auto-generated method stub
-		
+		graphics.drawArc(x, y, width, height, startAngle, arcAngle);
 	}
 
 	@Override
