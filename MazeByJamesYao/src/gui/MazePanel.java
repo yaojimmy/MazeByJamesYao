@@ -236,8 +236,7 @@ public class MazePanel extends Panel implements P5Panel {
 
 	@Override
 	public void addPolygon(int[] xPoints, int[] yPoints, int nPoints) {
-		// TODO Auto-generated method stub
-		
+		graphics.drawPolygon(xPoints, yPoints, nPoints);
 	}
 
 	@Override
