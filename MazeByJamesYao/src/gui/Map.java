@@ -6,8 +6,7 @@ package gui;
 import generation.CardinalDirection;
 import generation.Floorplan;
 import generation.Maze;
-import java.awt.Color;
-import java.awt.Graphics;
+import gui.MazePanel.CommonColors;
 
 /**
  * This class encapsulates all functionality to draw a map of the overall maze,
@@ -159,7 +158,8 @@ public class Map {
 		final int mazeWidth = maze.getWidth() ;
 		final int mazeHeight = maze.getHeight() ;
 		
-		m.setColor(Color.white.getRGB());
+		// Color.white
+		m.setColor(m.getColor(CommonColors.WHITE));
 		
 		// note: 1/2 of width and height is the center of the screen
 		// the whole map is centered at the current position
@@ -190,7 +190,7 @@ public class Map {
 						maze.hasWall(x,y, CardinalDirection.North) :
 							maze.hasWall(x,y-1, CardinalDirection.South));
 
-				m.setColor(seenWalls.hasWall(x,y, CardinalDirection.North) ? Color.white.getRGB() : Color.gray.getRGB());
+				m.setColor(seenWalls.hasWall(x,y, CardinalDirection.North) ? m.getColor(CommonColors.WHITE) : m.getColor(CommonColors.GRAY));
 				if ((seenWalls.hasWall(x,y, CardinalDirection.North) || showMaze) && theCondition)
 					m.addLine(startX, startY, startX + mapScale, startY); // y coordinate same
 				
@@ -199,7 +199,7 @@ public class Map {
 						maze.hasWall(x,y, CardinalDirection.West) :
 							maze.hasWall((x-1),y, CardinalDirection.East));
 
-				m.setColor(seenWalls.hasWall(x,y, CardinalDirection.West) ? Color.white.getRGB() : Color.gray.getRGB());
+				m.setColor(seenWalls.hasWall(x,y, CardinalDirection.West) ? m.getColor(CommonColors.WHITE) : m.getColor(CommonColors.GRAY));
 				if ((seenWalls.hasWall(x,y, CardinalDirection.West) || showMaze) && theCondition)
 					m.addLine(startX, startY, startX, startY - mapScale); // x coordinate same
 			}
@@ -317,7 +317,8 @@ public class Map {
 	 * @param gc to draw on
 	 */
 	private void drawCurrentLocation(MazePanel m, int viewDX, int viewDY) {
-		m.setColor(Color.red.getRGB());
+		// Color.red
+		m.setColor(m.getColor(CommonColors.RED));
 		// draw oval of appropriate size at the center of the screen
 		int centerX = viewWidth/2; // center x
 		int centerY = viewHeight/2; // center y
@@ -393,7 +394,8 @@ public class Map {
 		int sy = py;
 		int distance = maze.getDistanceToExit(sx, sy);
 		
-		m.setColor(Color.yellow.getRGB());
+		// Color.yellow
+		m.setColor(m.getColor(CommonColors.YELLOW));
 		
 		// while we are more than 1 step away from the final position
 		while (distance > 1) {
