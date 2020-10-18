@@ -1,12 +1,12 @@
 package generation;
 
-import java.awt.Color;
 import java.util.ArrayList;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import gui.MazeFileWriter;
+import gui.MazePanel;
 
 /**
  * A wall is a continuous sequence of wallboards in the maze.
@@ -59,7 +59,7 @@ public class Wall {
     /**
      * color of wall, only set by constructor and file reader.
      */
-    private Color col;
+    private int col;
     /**
      * partition flag, initially set to false. 
      * BSPBuilder code sets it to true for border case
@@ -74,6 +74,10 @@ public class Wall {
      * already by the user on its path through the maze.
      */
     private boolean seen;
+    /**
+     * MazePanel object for all color-related functions.
+     */
+    private MazePanel mazepanel = new MazePanel();
 
     /**
      * Constructor assigns parameter values to instance variables.
@@ -147,32 +151,8 @@ public class Wall {
      */
     private void initColor(final int distance, final int cc) {
         final int d = distance / 4;
-        // mod used to limit the number of colors to 6
-        final int rgbValue = calculateRGBValue(d);
         //System.out.println("Initcolor rgb: " + rgbValue);
-        switch (((d >> 3) ^ cc) % 6) {
-        case 0:
-            setColor(new Color(rgbValue, RGB_DEF, RGB_DEF));
-            break;
-        case 1:
-            setColor(new Color(RGB_DEF, RGB_DEF_GREEN, RGB_DEF));
-            break;
-        case 2:
-            setColor(new Color(RGB_DEF, RGB_DEF, rgbValue));
-            break;
-        case 3:
-            setColor(new Color(rgbValue, RGB_DEF_GREEN, RGB_DEF));
-            break;
-        case 4:
-            setColor(new Color(RGB_DEF, RGB_DEF_GREEN, rgbValue));
-            break;
-        case 5:
-            setColor(new Color(rgbValue, RGB_DEF, rgbValue));
-            break;
-        default:
-            setColor(new Color(RGB_DEF, RGB_DEF, RGB_DEF));
-            break;
-        }
+        setColor(mazepanel.getWallColor(d, cc, getExtensionX()));
     }
 
     /**
@@ -266,7 +246,7 @@ public class Wall {
         MazeFileWriter.appendChild(doc, mazeXML, "ySeg_" + number + "_" + i,
                 getStartPositionY());
         MazeFileWriter.appendChild(doc, mazeXML, "colSeg_" + number + "_" + i,
-                getColor().getRGB());
+                getColor());
     }
 
     /**
@@ -296,7 +276,7 @@ public class Wall {
             return false;
         }
         if ((dist != o.dist) || (partition != o.partition) || (seen != o.seen)
-                || (col.getRGB() != o.col.getRGB())) {
+                || (col != o.col)) {
             return false;
         }
         // all fields are equal, so both objects are equal
@@ -367,7 +347,7 @@ public class Wall {
     /**
      * @return the color
      */
-    public Color getColor() {
+    public int getColor() {
         return col;
     }
 
@@ -375,7 +355,7 @@ public class Wall {
      * @param color
      *            the color to set
      */
-    public void setColor(final Color color) {
+    public void setColor(final int color) {
         /*
          * for debugging: use random color settings such that all walls look
          * different

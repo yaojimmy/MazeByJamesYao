@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -117,6 +118,9 @@ public class MazePanel extends Panel implements P5Panel {
 		return false;
 	}
 
+	/**
+	 * @param rgb value of color
+	 */
 	@Override
 	public void setColor(int rgb) {
 		// TODO Auto-generated method stub
@@ -129,10 +133,45 @@ public class MazePanel extends Panel implements P5Panel {
 		return 0;
 	}
 
+	/**
+     * Default minimum value for RGB values.
+     * For Wall class
+     */
+    private static final int RGB_DEF = 20;
+    private static final int RGB_DEF_GREEN = 60;
+    
 	@Override
 	public int getWallColor(int distance, int cc, int extensionX) {
 		// TODO Auto-generated method stub
-		return 0;
+		// compute rgb value, depends on distance and x direction
+        final int part1 = distance & 7;
+        final int add = (extensionX != 0) ? 1 : 0;
+        final int rgbValue = ((part1 + 2 + add) * 70) / 8 + 80;
+        Color col;
+        switch (((distance >> 3) ^ cc) % 6) {
+        case 0:
+            col = new Color(rgbValue, RGB_DEF, RGB_DEF);
+            break;
+        case 1:
+            col = new Color(RGB_DEF, RGB_DEF_GREEN, RGB_DEF);
+            break;
+        case 2:
+            col = new Color(RGB_DEF, RGB_DEF, rgbValue);
+            break;
+        case 3:
+            col = new Color(rgbValue, RGB_DEF_GREEN, RGB_DEF);
+            break;
+        case 4:
+            col = new Color(RGB_DEF, RGB_DEF_GREEN, rgbValue);
+            break;
+        case 5:
+            col = new Color(rgbValue, RGB_DEF, rgbValue);
+            break;
+        default:
+            col = new Color(RGB_DEF, RGB_DEF, RGB_DEF);
+            break;
+        }
+		return col.getRGB();
 	}
 
 	@Override
