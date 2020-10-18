@@ -114,23 +114,37 @@ public class MazePanel extends Panel implements P5Panel {
 
 	@Override
 	public boolean isOperational() {
-		// TODO Auto-generated method stub
+		if (graphics != null) {
+			return true;
+		}
 		return false;
 	}
 
+	private Color col;
+	
 	/**
 	 * @param rgb value of color
 	 */
 	@Override
 	public void setColor(int rgb) {
 		// TODO Auto-generated method stub
-		
+		col = new Color(rgb);
 	}
-
+	
+	/**
+	 * @return rgb value of color
+	 */
 	@Override
 	public int getColor() {
 		// TODO Auto-generated method stub
-		return 0;
+		return col.getRGB();
+	}
+	
+	/**
+	 * @return rgb value of decoded color
+	 */
+	public int getColor(String decode) {
+		return Color.decode(decode).getRGB();
 	}
 
 	/**
@@ -201,7 +215,7 @@ public class MazePanel extends Panel implements P5Panel {
 	@Override
 	public void addLine(int startX, int startY, int endX, int endY) {
 		// TODO Auto-generated method stub
-		
+		graphics.drawLine(startX, startY, endX, endY);
 	}
 
 	@Override
