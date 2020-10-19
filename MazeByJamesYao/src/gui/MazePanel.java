@@ -143,7 +143,7 @@ public class MazePanel extends Panel implements P5Panel {
 	 * @param color to be decoded
 	 * @return rgb value of decoded color
 	 */
-	public int getColor(String decode) {
+	public static int getColor(String decode) {
 		return Color.decode(decode).getRGB();
 	}
 	
@@ -158,7 +158,7 @@ public class MazePanel extends Panel implements P5Panel {
 	 * @param enumerated color
 	 * @return
 	 */
-	public int getColor(CommonColors color) {
+	public static int getColor(CommonColors color) {
 		switch (color) {
 		case WHITE:
 			return Color.white.getRGB();

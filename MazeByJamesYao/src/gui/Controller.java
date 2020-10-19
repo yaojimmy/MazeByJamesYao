@@ -190,11 +190,15 @@ public class Controller {
         try {
         	this.getDriver().setMaze(config);
         	this.getRobot().setController(this);
+        	// There is a pause before the algorithm runs because the thread sleeps a certain amount of time
         	for (Direction dir: Direction.values()) {
         		this.getRobot().startFailureAndRepairProcess(dir, 4, 2);
         		Thread.sleep(1300);
         	}
 			this.getDriver().drive2Exit();
+			for (Direction dir: Direction.values()) {
+        		this.getRobot().stopFailureAndRepairProcess(dir);
+        	}
 		} catch (Exception e) {}
     }
     /**
