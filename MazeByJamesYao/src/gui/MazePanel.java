@@ -215,23 +215,6 @@ public class MazePanel extends Panel implements P5Panel {
         }
 		return col.getRGB();
 	}
-
-	// to get the height and width for drawing the background
-	private int viewWidth;
-	private int viewHeight;
-	
-	public void setWidth(int width) {
-		viewWidth = width;
-	}
-	public int getWidth() {
-		return viewWidth;
-	}
-	public void setHeight(int height) {
-		viewHeight = height;
-	}
-	public int getHeight() {
-		return viewHeight;
-	}
 	
 	/**
 	 * Draws two solid rectangles to provide a background.
@@ -246,10 +229,10 @@ public class MazePanel extends Panel implements P5Panel {
 		// TODO Auto-generated method stub
 		// black rectangle in upper half of screen
 		graphics.setColor(getBackgroundColor(percentToExit, true));
-		graphics.fillRect(0, 0, viewWidth, viewHeight/2);
+		graphics.fillRect(0, 0, Constants.VIEW_WIDTH, Constants.VIEW_HEIGHT/2);
 		// grey rectangle in lower half of screen
 		graphics.setColor(getBackgroundColor(percentToExit, false));
-		graphics.fillRect(0, viewHeight/2, viewWidth, viewHeight/2);
+		graphics.fillRect(0, Constants.VIEW_HEIGHT/2, Constants.VIEW_WIDTH, Constants.VIEW_HEIGHT/2);
 	}
 	
 	// colors for background
