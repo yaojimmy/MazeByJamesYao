@@ -61,4 +61,10 @@ public class DefaultState implements State {
     public void setBuilder(Builder dfs) {
         throw new RuntimeException("DefaultState:using unimplemented method");
     }
+
+	@Override
+	public void setEnergy(int energy) {
+		throw new RuntimeException("DefaultState:using unimplemented method");
+		
+	}
 }

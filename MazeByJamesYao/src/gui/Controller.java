@@ -205,9 +205,10 @@ public class Controller {
      * Switches the controller to the final screen
      * @param pathLength gives the length of the path
      */
-    public void switchFromPlayingToWinning(int pathLength) {
+    public void switchFromPlayingToWinning(int pathLength, int energy) {
         currentState = states[3];
         currentState.setPathLength(pathLength);
+        currentState.setEnergy(energy);
         currentState.start(this, panel);
     }
     /**

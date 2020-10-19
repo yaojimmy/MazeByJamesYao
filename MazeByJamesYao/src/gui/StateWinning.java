@@ -31,9 +31,11 @@ public class StateWinning extends DefaultState {
     
     boolean started;
     int pathLength;
+    int energy;
     
     public StateWinning() {
         pathLength = 0;
+        energy = 0;
         started = false;
     }
     
@@ -57,7 +59,7 @@ public class StateWinning extends DefaultState {
     	}
         // otherwise show finish screen with winning message
         // draw content on panel
-        view.redrawFinish(panel);
+        view.redrawFinish(panel, energy, pathLength);
         // update screen with panel content
         panel.update();
 
@@ -82,6 +84,10 @@ public class StateWinning extends DefaultState {
     @Override
     public void setPathLength(int pathLength) {
         this.pathLength = pathLength;
+    }
+    
+    public void setEnergy(int energy) {
+    	this.energy = energy;
     }
 }
 

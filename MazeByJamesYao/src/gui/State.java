@@ -82,5 +82,10 @@ public interface State {
      * @param isPerfect is true if maze must be perfect, false otherwise
      */
     void setPerfect(boolean isPerfect);
+    /**
+     * Sets energy of battery
+     * @param energy
+     */
+	void setEnergy(int energy);
 
 }

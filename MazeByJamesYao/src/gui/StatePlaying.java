@@ -163,7 +163,7 @@ public class StatePlaying extends DefaultState {
             walk(1);
             // check termination, did we leave the maze?
             if (isOutside(px,py)) {
-                control.switchFromPlayingToWinning(0);
+                control.switchFromPlayingToWinning(0, (int)control.getRobot().getBatteryLevel());
             }
             break;
         case Left: // turn left
@@ -176,7 +176,7 @@ public class StatePlaying extends DefaultState {
             walk(-1);
             // check termination, did we leave the maze?
             if (isOutside(px,py)) {
-                control.switchFromPlayingToWinning(0);
+                control.switchFromPlayingToWinning(0, (int)control.getRobot().getBatteryLevel());
             }
             break;
         case ReturnToTitle: // escape to title screen

@@ -111,20 +111,20 @@ public class SimpleScreens {
      * Draws the finish screen, screen content is hard coded
      * @param panel holds the graphics for the off-screen image
      */
-	void redrawFinish(MazePanel panel) {
+	void redrawFinish(MazePanel panel, int energy, int pathLength) {
 		Graphics g = panel.getBufferGraphics() ;
         if (null == g) {
             System.out.println(errorMsg) ;
         }
         else {
-            redrawFinish(g);
+            redrawFinish(g, energy, pathLength);
         }
 	}
 	/**
 	 * Helper method for redraw to draw final screen, screen is hard coded
 	 * @param gc graphics is the off-screen image
 	 */
-	private void redrawFinish(Graphics gc) {
+	private void redrawFinish(Graphics gc, int energy, int pathLength) {
 		// produce blue background
 		drawBackground(gc);
 		// write the title 
@@ -133,6 +133,12 @@ public class SimpleScreens {
 		// write some extra blurb
 		updateFontAndColor(gc, smallBannerFont, greenWM);
 		centerString(gc, "Congratulations!", 160);
+		// show energy
+		updateFontAndColor(gc, smallBannerFont, blackWM);
+		centerString(gc, "Energy: " + energy, 200);
+		// show pathlength
+		updateFontAndColor(gc, smallBannerFont, blackWM);
+		centerString(gc, "Pathlength: " + pathLength, 240);
 		// write the instructions
 		gc.setColor(blackWM);
 		centerString(gc, "Hit any key to restart", 300);
