@@ -127,8 +127,8 @@ public class MazePanel extends Panel implements P5Panel {
 	 */
 	@Override
 	public void setColor(int rgb) {
-		// TODO Auto-generated method stub
 		col = new Color(rgb);
+		graphics.setColor(col);
 	}
 	
 	/**
@@ -136,7 +136,6 @@ public class MazePanel extends Panel implements P5Panel {
 	 */
 	@Override
 	public int getColor() {
-		// TODO Auto-generated method stub
 		return col.getRGB();
 	}
 	
