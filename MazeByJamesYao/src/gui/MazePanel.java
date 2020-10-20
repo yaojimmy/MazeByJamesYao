@@ -5,6 +5,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Panel;
+import java.awt.font.FontRenderContext;
+import java.awt.font.GlyphVector;
+import java.awt.Font;
 
 /**
  * Add functionality for double buffering to an AWT Panel class.
@@ -138,8 +141,8 @@ public class MazePanel extends Panel implements P5Panel {
 	 * @param b
 	 * @param a
 	 */
-	public void setColor(float r, float g, float b, float a) {
-		col = new Color(r, g, b, a);
+	public void setColor(float[] rgba) {
+		col = new Color(rgba[0], rgba[1], rgba[2], rgba[3]);
 		graphics.setColor(col);
 	}
 	
@@ -320,6 +323,10 @@ public class MazePanel extends Panel implements P5Panel {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	public FontRenderContext getFontRenderContext() {
+		return graphics.getFontRenderContext();
+	}
 
 	/**
 	 * uses the java.awt.RenderingHints keys and values that correspond to the enumerated values
@@ -366,6 +373,10 @@ public class MazePanel extends Panel implements P5Panel {
 			break;
 		}
 		
+	}
+
+	public void drawGlyphVector(GlyphVector gv, float x, float y) {
+		graphics.drawGlyphVector(gv, x, y);
 	}
 
 }
