@@ -5,8 +5,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Panel;
-import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
+import java.awt.geom.Rectangle2D;
 import java.awt.Font;
 
 /**
@@ -188,6 +188,50 @@ public class MazePanel extends Panel implements P5Panel {
 		}
 		return 0;
 	}
+	
+	/**
+	 * 
+	 * @param fontCode
+	 * @return font name
+	 */
+	public static String getFontName(String fontCode) {
+		return Font.decode(fontCode).getFontName();
+	}
+	
+	/**
+	 * 
+	 * @param fontCode
+	 * @return font style int
+	 */
+	public static int getFontStyle(String fontCode) {
+		return Font.decode(fontCode).getStyle();
+	}
+	
+	/**
+	 * 
+	 * @param fontCode
+	 * @return font size
+	 */
+	public static int getFontSize(String fontCode) {
+		return Font.decode(fontCode).getSize();
+	}
+	
+	// private Font fields
+	private String fontName;
+	private int fontStyle;
+	private int fontSize;
+	
+	public void setFontName(String fn) {
+		fontName = fn;
+	}
+	
+	public void setFontStyle(int fstyle) {
+		fontStyle = fstyle;
+	}
+	
+	public void setFontSize(int fsize) {
+		fontSize = fsize;
+	}
 
 	/**
      * Default minimum value for RGB values.
@@ -320,12 +364,15 @@ public class MazePanel extends Panel implements P5Panel {
 
 	@Override
 	public void addMarker(float x, float y, String str) {
-		// TODO Auto-generated method stub
+		Font f = new Font(fontName, fontStyle, fontSize);
+		GlyphVector gv = f.createGlyphVector(graphics.getFontRenderContext(), str);
+        Rectangle2D rect = gv.getVisualBounds();
+        
+        x -= rect.getWidth() / 2;
+        y += rect.getHeight() / 2;
+        
+        graphics.drawGlyphVector(gv, x, y);
 		
-	}
-	
-	public FontRenderContext getFontRenderContext() {
-		return graphics.getFontRenderContext();
 	}
 
 	/**
@@ -373,10 +420,6 @@ public class MazePanel extends Panel implements P5Panel {
 			break;
 		}
 		
-	}
-
-	public void drawGlyphVector(GlyphVector gv, float x, float y) {
-		graphics.drawGlyphVector(gv, x, y);
 	}
 
 }

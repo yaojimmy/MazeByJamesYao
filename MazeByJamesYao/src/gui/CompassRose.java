@@ -1,9 +1,5 @@
 package gui;
 
-import java.awt.Font;
-import java.awt.font.GlyphVector;
-import java.awt.geom.Rectangle2D;
-
 import generation.CardinalDirection;
 import gui.MazePanel.CommonColors;
 
@@ -37,7 +33,10 @@ public class CompassRose {
     private double scaler;
     
     private double markerRadius;
-    private Font markerFont;
+    // Font values
+    private String fontName;
+    private int fontStyle;
+    private int fontSize;
     
     // (x,y) coordinates of center point on overall area
     private int centerX; // x coordinate of center point
@@ -49,7 +48,7 @@ public class CompassRose {
      * Construct a compass rose with the default settings.
      */
     public CompassRose() {
-        this(0.9, 1.7, Font.decode("Serif-PLAIN-16"));
+        this(0.9, 1.7, MazePanel.getFontName("Serif-PLAIN-16"), MazePanel.getFontStyle("Serif-PLAIN-16"), MazePanel.getFontSize("Serif-PLAIN-16"));
     }
     
     
@@ -61,10 +60,12 @@ public class CompassRose {
      *                      will position the markers outside of the bordering circle.
      * @param markerFont    The font used for the markers.
      */
-    public CompassRose(double scaler, double markerRadius, Font markerFont) {
+    public CompassRose(double scaler, double markerRadius, String fontName, int fontStyle, int fontSize) {
         this.scaler = scaler;
         this.markerRadius = markerRadius;
-        this.markerFont = markerFont;
+        this.fontName = fontName;
+        this.fontStyle = fontStyle;
+        this.fontSize = fontSize;
     }
     
     public void setPositionAndSize(int x, int y, int size) {
@@ -84,6 +85,9 @@ public class CompassRose {
     public void paintComponent(MazePanel panel) {
         
         mp = panel;
+        panel.setFontName(fontName);
+        panel.setFontStyle(fontStyle);
+        panel.setFontSize(fontSize);
         /* Original code
         Dimension dimension = this.getSize();
         int width = Math.min(dimension.width, dimension.height);
@@ -171,7 +175,7 @@ public class CompassRose {
 
 
 	private void drawDirectionMarker(MazePanel panel, int width) {
-		if (!Double.isNaN(markerRadius) && markerFont != null) {
+		if (!Double.isNaN(markerRadius) && fontName != null) {
             
             int pos = (int) (width * markerRadius / 2);
             
@@ -213,13 +217,7 @@ public class CompassRose {
 	}
  
     private void drawMarker(MazePanel panel, float x, float y, String str) {
-        GlyphVector gv = markerFont.createGlyphVector(panel.getFontRenderContext(), str);
-        Rectangle2D rect = gv.getVisualBounds();
-        
-        x -= rect.getWidth() / 2;
-        y += rect.getHeight() / 2;
-        
-        panel.drawGlyphVector(gv, x, y);
+        panel.addMarker(x, y, str);
         
     }
  
@@ -238,16 +236,6 @@ public class CompassRose {
     
     public void setMarkerRadius(double markerRadius) {
         this.markerRadius = markerRadius;
-        mp.update();
-    }
-    
-    public Font getMarkerFont() {
-        return markerFont;
-    }
-    
-    
-    public void setMarkerFont(Font markerFont) {
-        this.markerFont = markerFont;
         mp.update();
     }
     
