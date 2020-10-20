@@ -12,6 +12,7 @@ import java.awt.geom.Rectangle2D;
 import javax.swing.JComponent;
 
 import generation.CardinalDirection;
+import gui.MazePanel.CommonColors;
 
 /**
  * A component that draws a compass rose.  This class has no other functionality, but superclasses
@@ -24,19 +25,19 @@ import generation.CardinalDirection;
  */
 public class CompassRose extends JComponent {
 	private static final long serialVersionUID = 1916497172430988388L;
-	private static final Color greenWM = Color.decode("#115740");
-	private static final Color goldWM = Color.decode("#916f41");
+	private static final int greenWM = MazePanel.getColor("#115740");
+	private static final int goldWM = MazePanel.getColor("#916f41");
 	
 
-    private static final Color MAIN_COLOR = greenWM; //new Color(0.4f, 0.4f, 1.0f);
+    private static final int MAIN_COLOR = greenWM; //new Color(0.4f, 0.4f, 1.0f);
     private static final float MAIN_LENGTH = 0.95f;
     private static final float MAIN_WIDTH = 0.15f;
     
     private static final int CIRCLE_BORDER = 2;
-    private static final Color CIRCLE_HIGHLIGHT = new Color(1.0f, 1.0f, 1.0f, 0.8f); 
-    private static final Color CIRCLE_SHADE = new Color(1.0f, 1.0f, 1.0f, 0.3f); //new Color(0.0f, 0.0f, 0.0f, 0.2f); 
+    private static final float[] CIRCLE_HIGHLIGHT = new float[] {1.0f, 1.0f, 1.0f, 0.8f};
+    private static final float[] CIRCLE_SHADE = new float[] {1.0f, 1.0f, 1.0f, 0.3f}; //new Color(0.0f, 0.0f, 0.0f, 0.2f); 
     
-    private static final Color MARKER_COLOR = Color.black; //Color.WHITE; //Color.BLACK;
+    private static final int MARKER_COLOR = MazePanel.getColor(CommonColors.BLACK); //Color.WHITE; //Color.BLACK;
     
 
     private double scaler;
@@ -109,7 +110,7 @@ public class CompassRose extends JComponent {
         // draw main part in all 4 directions in same color
         // x, y arrays used for drawing polygons
         // starting point is always (centerX, centerY)
-        g2.setColor(MAIN_COLOR);
+        g2.setColor(new Color(MAIN_COLOR));
         final int[] x = new int[3];
         final int[] y = new int[3];
         x[0] = centerX;
@@ -171,9 +172,9 @@ public class CompassRose extends JComponent {
 		final int x = centerX - width / 2 + CIRCLE_BORDER;
 		final int y = centerY - width / 2 + CIRCLE_BORDER;
 		final int w = width - 2 * CIRCLE_BORDER;
-		g2.setColor(CIRCLE_SHADE);
+		g2.setColor(new Color(CIRCLE_SHADE[0], CIRCLE_SHADE[1], CIRCLE_SHADE[2], CIRCLE_SHADE[3]));
         g2.drawArc(x, y, w, w, 45, 180);
-        g2.setColor(CIRCLE_HIGHLIGHT);
+        g2.setColor(new Color(CIRCLE_HIGHLIGHT[0], CIRCLE_HIGHLIGHT[1], CIRCLE_HIGHLIGHT[2], CIRCLE_HIGHLIGHT[3]));
         g2.drawArc(x, y, w, w, 180 + 45, 180);
 	}
 
@@ -183,7 +184,7 @@ public class CompassRose extends JComponent {
             
             int pos = (int) (width * markerRadius / 2);
             
-            g2.setColor(MARKER_COLOR);
+            g2.setColor(new Color(MARKER_COLOR));
             /* original code
             drawMarker(g2, mid, mid - pos, trans.get("lbl.north"));
             drawMarker(g2, mid + pos, mid, trans.get("lbl.east"));
@@ -196,26 +197,26 @@ public class CompassRose extends JComponent {
             // WARNING: north south confusion
             // currendDir South is going upward on the map
             if (CardinalDirection.South == currentDir)
-            	g2.setColor(MARKER_COLOR);
+            	g2.setColor(new Color(MARKER_COLOR));
             else
-            	g2.setColor(goldWM);
+            	g2.setColor(new Color(goldWM));
             drawMarker(g2, centerX, centerY - pos, "N");
             if (CardinalDirection.East == currentDir)
-            	g2.setColor(MARKER_COLOR);
+            	g2.setColor(new Color(MARKER_COLOR));
             else
-            	g2.setColor(goldWM);
+            	g2.setColor(new Color(goldWM));
             drawMarker(g2, centerX + pos, centerY, "E");
             // WARNING: north south confusion
             // currendDir North is going downwards on the map
             if (CardinalDirection.North == currentDir)
-            	g2.setColor(MARKER_COLOR);
+            	g2.setColor(new Color(MARKER_COLOR));
             else
-            	g2.setColor(goldWM);
+            	g2.setColor(new Color(goldWM));
             drawMarker(g2, centerX, centerY + pos, "S");
             if (CardinalDirection.West == currentDir)
-            	g2.setColor(MARKER_COLOR);
+            	g2.setColor(new Color(MARKER_COLOR));
             else
-            	g2.setColor(goldWM);
+            	g2.setColor(new Color(goldWM));
             drawMarker(g2, centerX - pos, centerY, "W");
         }
 	}

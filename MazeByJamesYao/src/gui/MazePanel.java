@@ -132,6 +132,18 @@ public class MazePanel extends Panel implements P5Panel {
 	}
 	
 	/**
+	 * sets Color with rgba value
+	 * @param r
+	 * @param g
+	 * @param b
+	 * @param a
+	 */
+	public void setColor(float r, float g, float b, float a) {
+		col = new Color(r, g, b, a);
+		graphics.setColor(col);
+	}
+	
+	/**
 	 * @return rgb value of color
 	 */
 	@Override
